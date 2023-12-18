@@ -51,3 +51,9 @@ def cred_auth(req):
     else:
         cred_data={'msg':'Please provide your credentials.'}
     return Response(data = cred_data)
+
+from django.db import connection
+
+def table_exists(table_name):
+    existing_tables = connection.introspection.table_names()
+    return table_name in existing_tables
