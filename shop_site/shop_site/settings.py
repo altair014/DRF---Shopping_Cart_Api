@@ -27,6 +27,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# ALLOWED_HOSTS = ['192.168.0.104']
+# Run the command as py manage.py runserver 192.168.0.104:8000
 
 # Application definition
 
@@ -37,6 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'shop_app.apps.ShopAppConfig',
+    'shop_auth.apps.ShopAuthConfig',
+    'rest_framework'
 ]
 
 MIDDLEWARE = [
@@ -121,3 +126,16 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+AUTH_USER_MODEL = "shop_auth.ShopUser"
+
+# AUTHENTICATION_BACKENDS = [
+#     ('shop_auth.backends.CustomBaseBackend'),  # Replace 'your_app_name' with your app's name
+# ]
+
+# REST_FRAMEWORK = { 
+#                     'DEFAULT_AUTHENTICATION_CLASSES': [ 'shop_auth.authentications.CustomBaseAuthentication'], 
+#                     # 'DEFAULT_PERMISSION_CLASSES': [ 'rest_framework.permissions.IsAuthenticated']
+#                     }
+
+SESSION_COOKIE_AGE = 300
