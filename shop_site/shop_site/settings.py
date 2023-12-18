@@ -138,4 +138,4 @@ AUTH_USER_MODEL = "shop_auth.ShopUser"
 #                     # 'DEFAULT_PERMISSION_CLASSES': [ 'rest_framework.permissions.IsAuthenticated']
 #                     }
 
-SESSION_COOKIE_AGE = 300
+SESSION_COOKIE_AGE = 3000

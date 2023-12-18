@@ -103,8 +103,8 @@ class SellerCreate(CreateAPIView):
 
 class ProductCreate(APIView):
     serializer_class = ProductModelSerializer
-    # permission_classes = [IsAuthenticated, IsSeller]
-    # authentication_classes = [BasicAuthentication]
+    permission_classes = [IsAuthenticated, IsSeller]
+    authentication_classes = [BasicAuthentication]
     
     def post(self, request, *args, **kwargs):
 

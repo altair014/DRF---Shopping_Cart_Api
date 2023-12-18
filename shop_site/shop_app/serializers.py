@@ -32,7 +32,7 @@ class UserCreateModelSerilaizer(ModelSerializer):
                         'password': {
                                         'style':{'input_type': 'password'}
                                     }
-                        }
+                        }        
 
 class SellerModelSerializer(ModelSerializer):
     class Meta:
