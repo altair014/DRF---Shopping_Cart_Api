@@ -30,16 +30,13 @@ class Product(Model):
         return f"{self.product_name} by {self.product_id}"
 
 class Cart(Model):
-    product_choices = []
+    product_choices = [('---','---')]
     if table_exists('shop_app_product'):
         if len(Product.objects.all()) != 0:
-            print('if',product_choices)
             products = Product.objects.all()
             for item in products:
-                product_choices.append((item.product_id,item.product_name.lower().capitalize()))
-        else:
-            print('else',product_choices)
-            product_choices.append(('---','---'))
+                product_choices.append((item.product_name.lower().capitalize(),item.product_name.lower().capitalize()))
+
     s_no = models.BigAutoField(primary_key=True, auto_created=True)
     product_name = models.CharField(max_length=10, choices=product_choices)
     product_id = models.PositiveSmallIntegerField(unique=True)
@@ -54,4 +51,3 @@ class Orders(Model):
     product_name = models.CharField(max_length=10)
     seller_id = models.CharField(max_length=20, blank=True)
     quantity = models.PositiveSmallIntegerField(default=1)    
-

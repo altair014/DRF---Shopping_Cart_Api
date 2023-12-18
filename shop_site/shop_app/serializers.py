@@ -47,7 +47,7 @@ class ProductModelSerializer(ModelSerializer):
 class CartModelSerializer(ModelSerializer):
     class Meta:
         model = Cart
-        exclude = ('s_no',)
+        exclude = ('s_no', 'product_id')
 
 class ActionSerializer(Serializer):
     FIELDNAME = serializers.BooleanField()

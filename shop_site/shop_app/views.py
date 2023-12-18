@@ -52,6 +52,8 @@ class UserLogin(APIView):
             if user is not None:
                 set_expir(req=request)
                 login(request=request, user=user)
+                if ShopUser.objects.get(email=email).is_seller:
+                    return redirect(to=reverse(viewname='shop_app_name:product_create_name'))
                 return Response(data = {'msg':'Logged In.'})
             else:
                 logout(request=request)
@@ -96,18 +98,31 @@ class UserLogup(APIView):
 
 class SellerCreate(CreateAPIView):
     serializer_class = SellerModelSerializer
-    permission_classes = [IsAuthenticated, IsAdminUser, IsSuperuser]
-    authentication_classes = [BasicAuthentication]
+    # permission_classes = [IsAuthenticated, IsAdminUser, IsSuperuser]
+    # authentication_classes = [BasicAuthentication]
 
-class ProductCreate(CreateAPIView):
+class ProductCreate(APIView):
     serializer_class = ProductModelSerializer
     # permission_classes = [IsAuthenticated, IsSeller]
     # authentication_classes = [BasicAuthentication]
+    
+    def post(self, request, *args, **kwargs):
 
-    def get_queryset(self):
-        seller_id = Seller.objects.get(email=get_user(request=self.request))
-
-        return Product.objects.all().filter(seller_id)
+        serializer = self.serializer_class(data=request.POST)
+        
+        if serializer.is_valid():
+            data = dict(serializer.validated_data)                                         
+                       
+            try:
+                Product.objects.get(**data)
+            except Product.DoesNotExist:
+                Product.objects.create(**data)
+                return Response(data = {'msg':'New Product Added.'})
+            else:
+                return Response(data = {'msg':'Product Exists.'})
+                 
+        else:
+            return Response(data = serializer.errors)
 
 
 class ProductList(ListAPIView):
@@ -118,12 +133,7 @@ class CartCreate(CreateAPIView):
     serializer_class = CartModelSerializer
     # permission_classes = [IsAuthenticated]
     # authentication_classes = [BasicAuthentication]
-
-    def get(self, request, *args, **kwargs):
-        objects = Product.objects.all()
-        print(objects)
-        return Response(data=objects)    
-
+  
 class CartList(ListCreateAPIView):
     serializer_class = CartModelSerializer
     # permission_classes = [IsAuthenticated]
@@ -135,7 +145,4 @@ class CartList(ListCreateAPIView):
             print(choice(Seller.objects.all()).seller_id)
         if len(Cart.objects.all()) == 0:
             return Response(data={'msg':'Product Not Added.'})
-        
-    def post(self,request):
-        return redirect(to=reverse(viewname='shop_app_name:cart_list_name'))
         
